@@ -1,0 +1,15 @@
+const ok=/^0x[0-9a-fA-F]{40}$/.test(CONTRACT_ADDRESS);
+const buy=ok?"https://app.uniswap.org/swap?chain=robinhood&inputCurrency=NATIVE&outputCurrency="+CONTRACT_ADDRESS:"#";
+const ext=(a,h)=>{a.href=h;if(h!=="#"){a.target="_blank";a.rel="noopener"}};
+document.querySelectorAll(".buy").forEach(a=>ext(a,buy));
+document.querySelectorAll(".xlink").forEach(a=>ext(a,X_LINK));
+document.querySelectorAll(".scan").forEach(a=>ok?ext(a,"https://robinhoodchain.blockscout.com/token/"+CONTRACT_ADDRESS):a.remove());
+document.querySelectorAll("[data-social]").forEach(a=>{const h=SOCIAL_LINKS[+a.dataset.social];if(h)ext(a,h)});
+document.querySelectorAll(".chain").forEach(e=>e.textContent=CHAIN);
+document.querySelectorAll(".ca-text").forEach(e=>e.textContent=CONTRACT_ADDRESS);
+document.querySelectorAll(".copy").forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(CONTRACT_ADDRESS)}catch(e){const t=document.createElement("textarea");t.value=CONTRACT_ADDRESS;document.body.append(t);t.select();document.execCommand("copy");t.remove()}b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1500)});
+const dlg=document.querySelector("dialog"),di=dlg.querySelector("img");
+document.querySelectorAll(".gallery button").forEach(b=>b.onclick=()=>{di.src=b.dataset.full;di.alt=b.querySelector("img").alt;dlg.showModal()});
+dlg.onclick=()=>dlg.close();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(e=>io.observe(e));
